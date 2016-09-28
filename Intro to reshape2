@@ -24,4 +24,7 @@ dcast(aql, Month ~ variable, subset = .(Month == 5)) #quoted expression for subs
 
 acast(aql, Month ~ ., fun.aggregate = sum, na.rm = T )#. for no other variables
 
+#recast: the combination to melt and cast
+recast(airquality, id.var = c('Month','Day'), Month ~ variable)
+
 
