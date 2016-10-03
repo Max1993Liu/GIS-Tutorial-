@@ -8,7 +8,7 @@ p <- ggplot(data, aes(x = Dur_msec, y = F1.n)) #1. data layer
 
 p <- p + geom_point( color = 'red', size= 2) #2. geometries layer
 
-p <- p + stat_smooth() #3. add a smooth line
+p <- p + stat_smooth(color = 'blue') #3. add a smooth line
 
 p <- p + scale_x_log10(breaks = c(50,100,200,300,400)) + scale_y_reverse() #scale transformation
 
@@ -70,7 +70,7 @@ ggplot(data2, aes(Dur_cat, fill = Word)) + geom_bar(color = 'black', position = 
 
 ggplot(data2, aes(Dur_msec, fill = Word)) + geom_density(alpha = 0.5, position = 'stack', aes(y = ..count..))
 
-ggplot(data2, aes(Word, F1.n)) + geom_violin() + geom_dotplot(binaxis = 'y', stackdir = 'center',color = 'white', aes(fill = Word)) 
+ggplot(data2, aes(Word, F1.n)) + geom_dotplot(binaxis = 'y', stackdir = 'center',color = 'white', aes(fill = Word)) 
 
 '''Statistics Rule:
 1. Every geometry displays a statistics and every statistics are displayed with a geometry.
@@ -86,5 +86,45 @@ ggplot(data, aes(Word, Dur_msec)) + stat_summary(fun.y = mean, geom = 'bar', fil
 
 ggplot(data, aes(Word, Dur_msec)) + stat_summary(fun.y = mean, geom = 'bar') + stat_summary(fun.data = mean_cl_normal, geom = 'pointrange')
 
-#48/87
+ggplot(data, aes(Dur_msec, color = Word)) + geom_density()
+
+ggplot(data, aes(Dur_msec, color = Word)) + geom_density(aes(y = ..count..))
+
+#ggplot(data, aes(-F2.n)) + geom_density(aes(y = ..count.., fill = 'red')) 
+
+ggplot(data, aes(-F2.n, F1.n))  + stat_density2d(geom = 'polygon', aes(fill = ..level..))
+
+ggplot(data, aes(-F2.n, F1.n)) + stat_density2d(contour = F, geom = 'point', aes(color = ..density..), alpha = 0.3)
+
+ggplot(data, aes(-F2.n, F1.n)) + stat_density2d(contour = F, geom = 'tile', aes(fill = ..density..))
+
+ggplot(data, aes(-F2.n)) + geom_histogram(aes(y = ..count..,fill = ..count..))
+
+#scale_[aes]_
+ggplot(data, aes(Word, Dur_msec, fill = Word)) + stat_summary(fun.y = mean, geom = 'bar') + scale_fill_hue(name = 'legend Item')
+
+library('RColorBrewer')
+ggplot(data, aes(Word, Dur_msec, fill = Word)) + stat_summary(fun.y = mean, geom = 'bar') + scale_fill_brewer(palette = 'Set2')
+
+ggplot(data, aes(-F2.n, F1.n)) + stat_density2d(contour = F, geom = 'tile', aes(fill = ..density..)) + 
+  scale_fill_gradient(low = 'darkblue', high = 'darkred')
+
+ggplot(data, aes(-F2.n, F1.n)) + stat_density2d(contour = F, geom = 'tile', aes(fill = ..density..)) + 
+  scale_fill_gradientn(colors = rainbow(10))
+
+#faceting
+data$Dur_cat <- data$Dur_msec > mean(data$Dur_msec)
+
+ggplot(data, aes(-F2.n, -F1.n)) + geom_point() + facet_wrap('Word')
+
+ggplot(data, aes(-F2.n, -F1.n)) + geom_point() + facet_wrap(c('Word','Dur_cat'))
+
+ggplot(data, aes(-F2.n, -F1.n)) + geom_point() + facet_grid(Dur_cat~Word) + theme_bw()
+
+#for additional options
+#legend position
+ggplot(data, aes(-F2.n, F1.n)) + stat_density2d(contour = F, geom = 'tile', aes(fill = ..density..)) + theme(legend.position = 'bottom')
+
+#adding titles 
++labs(x = 'xlab', y = 'ylab', title = 'title')
 
