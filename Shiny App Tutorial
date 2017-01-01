@@ -1,0 +1,10 @@
+#Shiny App tutorial
+#Free online server: shinyapps.io
+'Basic 3-step structure'
+library(shiny)
+ui <- fluidPage()
+server <- function(input, output){}
+shinyApp(ui = ui , server = server)
+
+'different kind of inputs'
+sliderInput(inputId = 'num', label =  'choose a number', min = 10, max = 50, value = 30) #num being the name of the input
