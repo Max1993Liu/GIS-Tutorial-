@@ -6,6 +6,12 @@ def max(x: Int, y: Int): Int = {
 	else y
 }
 
+def ff(x: Int) {println("whatever")}
+//with no equal before {}, the function will always return Unit!
+//therefore it's only used for functions that only work by side effects
+//and with no return values
+
+
 //use arguments from console
 //by accessing args array 
 //note it's not [] rathr ()
@@ -86,4 +92,125 @@ val b = List(3,4)
 val c = a ::: b
 val d = 5 :: a
 
-P86
+
+val test = List("aa", "bb", "cc", "d", "e")
+//number of elements with length of 2
+test.count(s => s.length==2)
+//without the first 2
+test.drop(2)
+//similar
+test.dropRight(2)
+//exist, like any
+test.exists(s => s.length==1)
+//filter
+test.filter(s => s.length==2)
+//like all
+test.forall(s => s.endsWith("a"))
+//for each
+test.foreach(print)
+//first element
+test.head
+//last one
+test.last
+//all but the first one
+test.tail
+//mapping 
+test.map(s => s + "ohhhhh")
+//join in python
+test.mkString("+")
+//remove
+test.filterNot(s => s.length==2)
+//sort
+test.sortWith((s,t) => s.charAt(0).toLower < t.charAt(0).toLower)
+//or natural sorting
+test.sorted
+//some syntax sugar
+test.sortWith(_ < _)
+
+
+tuples in scala can contain different data types
+access tuples by one index! and a leading underscore
+val pair = ("a", 123)
+pair._1 
+//return "a"
+
+
+both set an map have their mutable and immutable version
+default using immutable
+//if use val will be an error
+var testSet = Set("a", "b")
+testSet += "c"
+println(testSet)
+
+//mutable version
+import scala.collection.mutable.HashSet
+val testSet = HashSet("a", "b")
+testSet += "c"
+println(testSet)
+
+mutable Maps in scala, the 1 -> "whatever" actually envokes the the method of 
+integer 1, (1).->"whatever", and it returns a tuple (1, "whatever") feeds into the map
+
+import scala.collection.mutable.Map
+val treasureMap = Map[Int, String]()
+  treasureMap += (1 -> "Go to island.")
+  treasureMap += (2 -> "Find big X on ground.")
+  treasureMap += (3 -> "Dig.")
+ println(treasureMap(2))
+
+//default immutable map
+val romanNumeral = Map(
+    1 -> "I", 2 -> "II", 3 -> "III", 4 -> "IV", 5 -> "V"
+  )
+
+You can also use assert in scala!
+
+The functional way of programming:
+//original  
+def printing(args: Array[String]): Unit ={
+	var i = 0 
+	while (i < args.length){
+		println(args(i))
+		i += 1
+	}
+}
+//functional way 
+def printing(args: Array[String]): Unit = {
+	args.foreach(println)
+}
+
+def printing(args: Array[String]): Unit ={
+	for (arg <- args)
+		println(arg)
+}
+
+But there's still problem, because the function we defined is only useful in its
+side effects, meaning that it doesn’t return anything. So a more functional way:
+
+def ms(args: Array[String]): Unit = {
+	args.mkString('\n')
+}
+println(ms(testArray))
+
+
+A balanced attitude for Scala programmers
+Prefer vals, immutable objects, and methods without side effects. 
+Reach for them first. Use vars, mutable objects, and methods with side effects 
+when you have a specific need and justification for them.
+ 
+
+//classes
+class test {
+	var a = 0 
+}
+val test = new test
+test.a //0
+test.a = 2 //It's ok since a is a var
+
+To prevent end-user from changing the internal values
+class test{
+	private var a = 0
+}
+val test = new test
+test.a = 3 //error
+
