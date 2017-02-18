@@ -385,3 +385,27 @@ firstArg match {
 	case _ => "Huh?"
 }
 println(res)
+
+
+------- There's no break or continue in scala--------------
+//To find the file endswith .scala but not start with -
+//one way to do it
+var i = 0
+var foundIt = false
+
+while (i < args.length && !foundIt){
+  if (!args(i).startsWith("-")){
+    if (args(i)).endsWith(".scala"))
+      foundIt = true
+  }
+  i += 1
+}
+
+//A more functional way of doing it
+def searchForm(i: Int): Int = {
+  if (i >= args.length) -1
+  else if (args(i).startsWith("-")) searchForm(i+1)
+  else if (args(i).endsWith(".scala")) i
+  else searchForm(i + 1)
+}
+val i = searchForm
