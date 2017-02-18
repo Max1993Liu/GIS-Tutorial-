@@ -214,3 +214,86 @@ class test{
 val test = new test
 test.a = 3 //error
 
+
+use three quote signs for raw string
+"""This is a "raw string", no need for any escapes"""
+
+in scala, you can not pass a value to a function without declaring it previously
+but you could pass in a symbol with just  'aSymbol without declaring it
+//symbols in scala
+val s = 'aSymbol
+//only feature of a symbol
+s.name
+
+val s = "What is it that matters"
+//index
+s.indexOf('a')
+
+
+logical operators AND && OR ||
+
+//Usage of scala classes: if the class doesn't have any parameters, you could escape the parenthesis
+----- following is a class for Rational numbers------------
+----- core concepts: required, private, overlaod-----------
+----- core concepts: implicit conversion ------------------
+
+class Rational(n: Int, d: Int) {
+  require(d!=0)
+
+  //calculate the greatest common divisors
+  private val g = gcd(n.abs, d.abs)
+
+  val numer = n/g
+  val denom = d/g
+  override def toString = numer + "/" + denom
+
+  //auxillary constructor
+  //every auxillary constructor is eventually calling the
+  //primary constructor in a scala class
+  def this(n: Int) = this(n, 1)
+
+
+  def add(that: Rational): Rational =
+  {
+    new Rational(
+      numer * that.denom + that.numer * denom,
+      denom * that.denom
+    )
+  }
+
+  def lessThan(that: Rational) =
+    this.numer * that.denom < that.numer * this.denom
+
+  def max(that: Rational) =
+    if (this.lessThan(that)) that else this
+
+  def * (that: Rational): Rational =
+    new Rational(numer * that.numer, denom * that.denom)
+
+  def + (that: Rational): Rational =
+    new Rational(numer * that.denom + that.numer * denom,
+      denom * that.denom)
+
+  //method overloading
+  //so and Int can be added to a Rational
+  def + (i: Int): Rational =
+    new Rational(numer + i * denom, denom)
+
+  private def gcd(a: Int, b: Int): Int =
+    if (b==0) a else gcd(b, a%b)
+}
+
+//imlicit conversion
+//now it's possible to do Int + Rational
+//for an implicit conversion to work, it needs to be in scope
+//it won't work if it's only put in a class
+implicit def intToRational(x: Int) = new Rational(x)
+
+
+val test = new Rational(2, 3)
+val another = new Rational(4, 6)
+2 + another
+
+---------------- End of class -----------------------------
+
+-------- control flows --------------------------
