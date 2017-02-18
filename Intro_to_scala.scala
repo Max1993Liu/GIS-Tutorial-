@@ -297,3 +297,13 @@ val another = new Rational(4, 6)
 ---------------- End of class -----------------------------
 
 -------- control flows --------------------------
+//if 
+var filename = "default.txt"
+if ( !args.isEmpty ) 
+	filename  = args[0]
+
+//a more functionl way of writing if conditions
+//note that this time filename is a val not a var
+val filename = if (!args.isEmpty) args[0] else "default.txt"
+
+
