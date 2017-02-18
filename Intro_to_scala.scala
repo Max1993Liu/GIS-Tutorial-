@@ -307,3 +307,81 @@ if ( !args.isEmpty )
 val filename = if (!args.isEmpty) args[0] else "default.txt"
 
 
+//for loop
+val filesHere = (new java.io.File(".")).listFiles
+//print all the files
+for ( file <- filesHere) 
+	println(file) 
+//only print the file ends with .py
+for ( file <- filesHere if file.getName.endsWith(".py"))
+    println(file)
+//or even more defensive
+for ( file <- filesHere if file.getName.endsWIth(".py") if file.isFile)
+	printLn(file)
+
+//nested iteration
+def fileLines(file: java.io.File) =
+    scala.io.Source.fromFile(file).getLines().toList
+def grep(pattern: String) =
+    for (
+         file <- filesHere
+         //note here a semicolon is needed!!
+         if file.getName.endsWith(".scala");
+         line <- fileLines(file)
+         if line.trim.matches(pattern)
+          ) println(file +": "+ line.trim)
+grep(".*gcd.*")
+//similar to nested list comprehension in Python
+
+//note that in the previous example `line.trim` is computed twice
+//use bound value by: 
+def grep(pattern: String) =
+    for {
+      file <- filesHere
+      if file.getName.endsWith(".scala")
+      line <- fileLines(file)
+      //assgined line.trim to value trimmed
+      trimmed = line.trim
+      if trimmed.matches(pattern)
+    } println(file +": "+ trimmed)
+grep(".*gcd.*")
+
+//producing a new collection with for loop
+val scalaFiles =
+  //using curly brace for long for expressions to avoid semocolon problems
+  for {file <- filesHere if file.getName.endsWith(".scala")}
+  yield {file}
+
+-------- A basic try => catch => finally stucture ---------
+import java.io.FileReader
+import java.io.FileNotFoundException
+import java.io.IOException
+
+try {
+	file = new FileReader("someFile.txt")
+} catch {
+	case e: FileNotFoundException => //do sth
+	case e: IOException => //do sth 
+} finally {
+	file.close
+}
+
+
+-------- A basic match => case structure -------------------
+val firstArg = if (!args.isEmpty) args(0) else " "
+firstArg match {
+	case "salt" => println("Pepper")
+	case "chips" => println("Salsa")
+	case "eggs" => println("Bacon")
+	case _ => println("huh?")
+}
+
+//A more functional way, since match-case also return values
+val res = 
+firstArg match {
+	case "salt" => "Pepper"
+	case "chips" => "Salsa"
+	case "eggs" => "Bacon"
+	case _ => "Huh?"
+}
+println(res)
