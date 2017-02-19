@@ -464,3 +464,38 @@ val someNumbers = List(-11, -10, -5, 0, 5, 10)
 someNumers.filter( x => x > 0)
 //here scala does target typing, so you can ignore type and parenthesis
 
+//place holders
+someNumers.filter( _ > 0)
+
+val f = (x: Int, y: Int) => x + y
+val f = (_: Int) + (_: Int) //same here
+f(2, 3) //return 5
+
+
+--- Partially invoked function -----------------------------------
+def sum(a: Int, b: Int, c:Int) = a + b + c
+val three_params = sum _
+three_params(1, 2, 3) // 6
+
+val one_params = sum(1, _:Int, 3)
+one_params(2) //6
+
+--- Closure ------------------------------------------------------
+var more = 1
+val increase = (x : Int) => x + more
+increase(10) //return 11
+//now that we change the value of more
+more = 100
+increase(10) //return 110
+
+--- Repeated arguments -------------------------------------------
+//just like kwags
+def echo(args: String*){
+  for (arg <- args) println(arg)
+}
+echo("A", "B", "C")
+
+//unpacking values
+val arr = Array("A", "B", "C")
+echo(arr) //get error
+echo(arr: _*) //expand the arguments by : _*
