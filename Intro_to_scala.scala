@@ -409,3 +409,58 @@ def searchForm(i: Int): Int = {
   else searchForm(i + 1)
 }
 val i = searchForm
+
+------ Functions ------------------------------------------
+//A simple function method to check the longlines in files
+import scala.io.Source
+object LongLines { 
+  
+  def processFile(filename: String, width:Int): Unit ={
+    val source = Source.fromFile(filename)
+    for (line <- source.getLines())
+       processLine(filename, width, line)
+  }
+  
+  private def processLine(filename: String, width: Int, line: String): Unit ={
+    if (line.length > width)
+      println(filename + ":" + line.trim)
+  }
+  
+}
+
+
+//In order to run it in command line
+//first argument is width, all the others are filenames
+object FindLongLines {
+  def main(args: Array[String]): Unit ={
+    val width = args(0).toInt
+    for (arg <- args.drop(1))
+      LongLines.processFile(arg, width)
+  }
+}
+
+---- Local functions: functions that you don't want your users to see----
+---- You can use private, while scala provides another choice: --
+---- Functions within functions ---------------------------------
+//This time using local functions
+def processFile(filename: String, width: Int): Unit ={
+  //here filename and width can be ignored, since it's in the scope
+  def processLine(filename: String, width: Int, line: String): Unit ={
+    if (line.length > width)
+      println(filename + ":" + line)
+  }  
+  
+  val source = Source.fromFile(filename)
+  for ( line <- source.getLines()){
+    processLine(filename, width, line)
+  }
+}
+
+---- Function literal ---------------------------------------------
+val increase = (x: Int) => x + 1
+//increase is a function that increase the input by 1
+//here you need to specify the input types, meanwhile
+val someNumbers = List(-11, -10, -5, 0, 5, 10)
+someNumers.filter( x => x > 0)
+//here scala does target typing, so you can ignore type and parenthesis
+
