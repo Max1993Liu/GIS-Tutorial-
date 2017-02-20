@@ -560,3 +560,68 @@ object FileMatcher {
 }
 
 --- Currying -----------------------------------------------
+def curriedSum(x: Int)(y: Int) = x + y
+curriedSum(1)(2) //3
+
+
+--- writing control structures -----------------------------
+def runTwice(op: Double => Double, x: Double) = op(op(x))
+runTwice(_ + 1, 5)
+
+--- by-name parameters -------------------------------------
+//A new type of asserts
+var assertionEnabled = true
+
+def myAssert(predicate: () => Boolean) = 
+  if (assertionEnabled && !predicate())
+    throw new AssertionError
+
+//Now if you wanna use it
+myAssert(() => 5 > 3)
+
+def byNameAssert(predicate: => Boolean) = 
+  if (assertionEnabled && !predicate)
+    throw new AssertionError
+//So this time you can use
+myAssert(5 > 3)
+
+--- Composition & Inheritance -----------------------------
+composition: one class holds a reference to another, using the referenced
+class to help fulfill its mission
+inheritance: superclass/subclass relationship
+
+//create an abstract class
+abstract class Element {
+  def contents: Array[String]
+  def height: Int = contents.length
+  def width: Int = if (height == 0) 0 else contents(0).length 
+}
+//you can not instantiate an abstract class
+
+Note: Technically a parenthesisless function and a function with no parameters
+are the same.
+Note: But traditionally a perenthesisless function has no side effect: like ##.length
+Note: Meanwhile a function with no parameter would usually have some sort of side effect: like println()
+
+//create an abstract class
+abstract class Element {
+  def contents: Array[String]
+  def height: Int = contents.length
+  def width: Int = if (height == 0) 0 else contents(0).length
+}
+//you can not instantiate an abstract class
+
+ArrayElement is a subclass of Element class
+it inherits all the non-private members from class Element
+if leaves out an extends clause, scala implicitely assumes it's inherits
+from the class AnyRef
+
+class ArrayElement(conts: Array[String]) extends Element {
+  def contents: Array[String] = conts
+}
+
+//you can also override the method in the abstract class into a field
+class ArrayEleemnt(const: Array[String]) extends Element {
+	val contents: Array[String] = const
+}
+
