@@ -625,3 +625,24 @@ class ArrayEleemnt(const: Array[String]) extends Element {
 	val contents: Array[String] = const
 }
 
+//in scala it's forbidden to define method and field with the same name
+
+//A better way to do it, combining field and parameter
+class ArrayElement(val contents: Array[String]) extends Element
+
+//you can also define var and private in this way
+class Cat {
+  val dangerous = false
+}
+class Tiger(
+  override val dangerous: Boolean,
+  private var age: Int
+           ) extends Cat
+
+//note here to invoke the constructor of superclass
+//you need to pass an Array to ArrayElement class
+class LineElement(s: String) extends ArrayElement(Array(s)) {
+  override def width = s.length
+  override def height = 1
+}
+
