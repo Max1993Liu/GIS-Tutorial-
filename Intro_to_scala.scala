@@ -646,3 +646,64 @@ class LineElement(s: String) extends ArrayElement(Array(s)) {
   override def height = 1
 }
 
+//because of the inheritance hierachy, the following statements will be all valid
+val a: Element = new ArrayElement(Array("hello", "world"))
+val b: ArrayElement = new LineElement("hello world")
+
+to declare a method can not be overrided, put final in front of the method:
+final override def demo()
+to declare a class that shouldn't have subclasses, put final in front of the class name:
+final class ArrayElement
+
+
+//re-implement LineElement so it's a subclass of Element
+//which makes more sense in inheritance
+class LineElements(s: String) extends Element {
+  def contents = Array(s)
+  override def height = 1
+  override def width = s.length
+}
+
+//add functions in Element class
+def above(that: Element): Element = {
+    new ArrayElement(this.contents ++ that.contents)
+  }
+
+  /*
+  def beside(that: Element): Element = {
+    val contents = new Array[String](this.contents.length)
+    for (i <- 0 until this.contents.length)
+      contents(i) = this.contents(i) + that.contents(i)
+      new ArrayElement(contents)
+  }
+  */
+  
+  //better way to implement it 
+  def beside(that: Element): Element = {
+    val contents = for ((line1, line2) <- this.contents zip that.contents) yield line1+line2
+    new ArrayElement(contents)  
+  }
+  
+  override def toString = contents mkString "\n"
+}
+
+
+--- Defining a factory object ----------------------------
+Instead of allowing users to create different types of Element with new
+we should create a companion object that creates different types of Elements in one place
+
+
+object Element{
+  def elem(contents: Array[String]): Element =
+    new ArrayElement(contents)
+  
+  def elem(chr: Char, width: Int, height: Int): Element =
+    new UniformElement(chr, width, height)
+  
+  def elem(line: String): Element =
+    new LineElement(line)
+}
+
+then import Element.ele at the top of source file
+so we call the factory method by simply using elem
+
