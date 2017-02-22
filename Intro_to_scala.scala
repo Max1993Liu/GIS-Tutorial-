@@ -773,3 +773,60 @@ import Element.elem
 
 --- Hierachy in Scala ----------------------------------
 In scala, any class is a subclass of Any
+The methods of Any includeds
+
+final def ==(that: Any): Boolean
+// == actually calls equals
+// != is the negation of equals
+final def !=(that: Any): Boolean
+def equals(that: Any): Boolean
+def ##: Int
+def hashCode: Int
+def toString: String
+
+Any has two subclasses: AnyVal and AnyRef
+
+Null and Nothing are the bottom class (subclass of all classes)
+useful in error handling:
+
+def error(message: String): Nothing =
+  throw new RuntimeException(message)
+
+
+--- Traits ----------------------------------------------
+A trait encapsulates method and field definittions,
+which can be reused by mixing them into classes.
+Unlike class inheritance, in which each class must inherit from just one superclass,
+a class can mix in any number of traits.
+
+trait Philosophical {
+  def philosophize(): Unit = {
+    println("I consume memory, therefor I am!")
+  }
+}
+
+class Frog extends Philosophical {
+  override def toString: String = "Green"
+}
+
+val frog = new Frog
+
+//trait also defines a type
+val phil: Philosophical = frog
+
+//mix trait into a class with a superclass
+class Animal
+
+class Frog extends Animal with Philosophical {
+  override def toString = "green"
+}
+
+//you can still call Philosophical type
+val phrog: Philosophical = new Frog
+
+The only two differences between trait and class is that:
+1. trait can not take constructor parametres 
+trait NoPoint(x: Int, y: Int) // Does not compile
+2. trait is dynamicly bounded to superclasses
+when calling super.function in class, you already know the superclass
+
