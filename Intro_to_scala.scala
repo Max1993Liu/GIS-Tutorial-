@@ -830,3 +830,28 @@ trait NoPoint(x: Int, y: Int) // Does not compile
 2. trait is dynamicly bounded to superclasses
 when calling super.function in class, you already know the superclass
 
+
+class Point(val x: Int, val y: Int)
+
+trait Rectangular {
+  //couldn't provide constructor variable
+  def topLeft: Point
+  def bottomRight: Point
+  def left = topLeft.x
+  def right = bottomRight.x
+  def width = right - left
+}
+
+abstract class Component extends Rectangular {
+  //Add other methods
+}
+
+--- Ordered traints ---------------------------------
+class Rational(n: Int, d: Int) extends Ordered[Rational]{
+  //some method
+  def compare(that: Rational) = {
+    this.number - that.number
+  }
+}
+1. Ordered trait need to pass a type variable [] 
+2. Ordered trait need to define a method compare
