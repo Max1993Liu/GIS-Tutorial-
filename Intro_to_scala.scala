@@ -994,3 +994,55 @@ package bobsrockets {
    package launch {
      class Booster2
 } }
+
+when using the curly-braces packaging syntax, 
+all names accessible in scopes outside the packaging are also available inside it
+
+We can also create nested packages without the curly braces by:
+package bobsrockets
+package fleets
+class Fleet {
+
+}
+
+scala provides a package _root_ that is outside any package you can write
+
+--- Imports ------------------------------------
+package bobsdelights
+abstract class Fruit(
+    val name: String,
+    val color: String
+                    )
+
+object Fruits {
+  object Apple extends Fruit("apple", "red")
+  object Orange extends Fruit("orange", "orange")
+  object Pear extends Fruit("Pear", "yellowish")
+  val menu = List(Apple, Orange, Pear)
+}
+
+// easy access to Fruit
+import bobsdelights.Fruit
+
+// easy access to all members of bobsdelights
+import bobsdelights._
+
+// easy access to all members of Fruits
+import bobsdelights.Fruits._
+
+The import in scala works more than just import packages
+def showFruit(fruit: Fruit) {
+  import fruit._
+  println(name + "s are" + color)
+}
+
+--- Selectors and Renaming during import-----------
+import Fruits.{Apple, Orange}
+import Fruits.{Apple => Macintosh, Orange => Lemon}
+import Fruits.{Apple => A, _}
+//This imports all methods in Fruits except changing apple to A
+
+//implicit imports in scala
+import java.lang._
+import scala._
+import Predef._
