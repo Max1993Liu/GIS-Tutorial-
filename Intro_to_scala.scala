@@ -855,3 +855,63 @@ class Rational(n: Int, d: Int) extends Ordered[Rational]{
 }
 1. Ordered trait need to pass a type variable [] 
 2. Ordered trait need to define a method compare
+
+--- Traits as stackable modifications --------------
+abstract class IntQueue {
+  def get(): Int
+  def put(x: Int)
+}
+
+import scala.collection.mutable.ArrayBuffer
+
+class BasicIntQueue extends IntQueue {
+  private val buf = new ArrayBuffer[Int]
+  def get = buf.remove(0)
+  def put(x: Int) {buf += x}
+}
+
+val test = new BasicIntQueue
+
+test.put(10)
+test.put(20)
+test.get()
+test.get()
+
+1. Here doubling extends IntQueue, So it can only be mixed into a class that also extends IntQueue
+2. trait can has a super.method that's actually from an abstract class, which is illegal 
+when using a normal class
+
+trait Doubling extends IntQueue {
+  abstract override def put(x: Int) {super.put(2*x)}
+}
+
+//so to used a trait 
+class MyQueue extends BasicIntQueue with Doubling
+//now the put is doubled
+val test = new MyQueue
+test.put(10)
+test.get() //20
+
+//or you can just call a new class like this
+val queue = new BasicIntQueue with Doubling
+
+--- stacked -----------------------------------------
+trait Incrementing extends IntQueue {
+  abstract override def put(x: Int): Unit ={
+    super.put(x+1)
+  }
+}
+
+trait Filtering extends IntQueue {
+  abstract override def put(x: Int): Unit ={
+    if (x >= 0) super.put(x)
+  }
+}
+
+//now stacking traits
+val queue = new BasicIntQueue with Incrementing with Filtering
+queue.put(-1)
+queue.put(2)
+queue.get()
+
+!! The method in the traits further to the right runs first
