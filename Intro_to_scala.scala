@@ -914,4 +914,83 @@ queue.put(-1)
 queue.put(2)
 queue.get()
 
-!! The method in the traits further to the right runs first
+!! The method in the traits further to the right runs first !!
+
+
+1. If the behavior will not be reused, then make it a concrete class
+2. If it might be reused in multiple, unrelated classes, make it trait
+3. If you want to inherit from it in Java code
+4. If you plan to distribute it in compiled form, and you expect outside groups
+to write classes inheriting from it, you might lean towards using an abstract class.
+because when a trait gains or loses a member, any classes that inherit from it must be recompiled.
+5. If efficiency is very important, lean towards using a class  
+
+--- Packages and Importing -------------------------
+put the content of an entire file into pakage by putting package pacakgename on top
+ex. package company.navigator
+
+put the content of a certain package in curly braces if a document contains
+several different Packages
+
+package bobsrockets {
+          package navigation {
+            // In package bobsrockets.navigation
+            class Navigator
+            package tests {
+              // In package bobsrockets.navigation.tests
+              class NavigatorSuite
+            }
+} }
+
+
+  package bobsrockets {
+          package navigation {
+            class Navigator {
+              // No need to say bobsrockets.navigation.StarMap
+              // Here because it's in the same package
+              val map = new StarMap
+}
+            class StarMap
+          }
+          class Ship {
+            // No need to say bobsrockets.navigation.Navigator
+            // Only need to speciy navigation. ,because they are both in bobsrockets package
+            val nav = new navigation.Navigator
+          }
+          package fleets {
+            class Fleet {
+              // No need to say bobsrockets.Ship
+              def addShip() { new Ship }
+} }
+}
+
+package bobsrockets {
+   class Ship
+}
+ package bobsrockets.fleets {
+   class Fleet {
+     // Doesn’t compile! Ship is not in scope.
+     def addShip() { new Ship }
+   }
+
+}
+
+// Base packages are in package.scala
+// In file launch.scala
+ package launch {
+   class Booster3
+}
+ // In file bobsrockets.scala
+ package bobsrockets {
+   package navigation {
+     package launch {
+       class Booster1
+     }
+     class MissionControl {
+       val booster1 = new launch.Booster1
+       val booster2 = new bobsrockets.launch.Booster2
+       val booster3 = new _root_.launch.Booster3
+} }
+   package launch {
+     class Booster2
+} }
