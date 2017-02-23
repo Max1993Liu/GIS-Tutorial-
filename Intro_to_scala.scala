@@ -1046,3 +1046,59 @@ import Fruits.{Apple => A, _}
 import java.lang._
 import scala._
 import Predef._
+
+
+private members:
+A member labeled private is visible only inside the class or object that contains the member definition
+class Outer {
+  class Inner {
+    private def f() { println("f") }
+    class InnerMost {
+      f() // OK }
+    }
+    (new Inner).f() // error: f is not accessible
+  }
+
+protected members:
+A protected member is only accessible from subclasses of the class in which the member is defined
+  package p {
+    class Super {
+      protected def f() { println("f") }
+    }
+    class Sub extends Super {
+      f()
+    }
+    class Other {
+      (new Super).f()  // error: f is not accessible
+    }
+  }
+
+  A class can access all private methods of its companion object
+  An object can access all private methods of its companion class
+
+class Rocket {
+  import Rocket.fuel
+  private def canGoHomeAgain = fuel > 20
+}
+  
+object Rocket {
+  private def fuel = 10
+}
+
+
+--- List ----------------------------------------------
+List is immutable
+The element of list all have the same type
+
+//These all the same
+var nums = List(1,2, 3)
+var nums = 1 :: (2 :: (3 :: Nil))
+
+//list patterns
+//just like expanding tuples in Python
+val fruit = List("apple", "orange", "pears")
+val List(a, b, c) = fruit
+///if not sure about the length of list
+val a::b::rest = fruit
+//b will be a list
+val a::b  = fruit
