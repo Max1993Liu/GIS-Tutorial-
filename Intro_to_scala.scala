@@ -1102,3 +1102,38 @@ val List(a, b, c) = fruit
 val a::b::rest = fruit
 //b will be a list
 val a::b  = fruit
+
+fruit.head //first one
+fruit.tail //all but the first one
+fruit.init //all but the last one
+fruit.last //last one
+
+val abcd = List("a","b","c","d","e")
+abcd take 2 //take first 2
+abcd drop 2 //take all except first 2
+abcd splitAt 2 //return two lists
+val (first, second) = abcd.splitAt(2) //assign value after spliit
+
+val zipped = abcd.indices zip abcd // like enumerate in Python
+val zipped = abcd.zipWithIndex 
+
+val (abcd, indexes)  = zipped.unzip
+
+val arr = abcd.toArray
+val abcd = arr.toList
+
+--- High-order functions for List
+val nums = List(1,2,3,4)
+nums map (_ + 1)
+val words = List("the", "quick", "pass")
+words map (_.toList.reverse.mkString) //reverse all the strings
+
+var sum = 0 
+nums foreach( sum += _)
+//The difference between foreach and map is foreach returns unit
+
+//take the elements untill
+nums takeWhile(_  > 0)
+//drop the elements unitll
+words dropWhile (_ startsWith "t")
+
