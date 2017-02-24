@@ -1137,3 +1137,66 @@ nums takeWhile(_  > 0)
 //drop the elements unitll
 words dropWhile (_ startsWith "t")
 
+//span combines the takeWhile and dropWhile
+val (a, b) = nums span(_ > 0)
+
+//folding lists
+//this creates a left leaning operation tree
+def sum(xs: List[Int]): Int = {
+  (0 /: xs)(_ + _)
+}
+//creates a right leaning operation tree
+def product(xs: List[Int]): Int = {
+  (xs :\ 1)(_ * _)
+}
+
+
+--- Collections -----------------------------------
+//appending both ends of List
+//use ListBuffer
+import scala.collection.mutable.ListBuffer
+val buf = new ListBuffer[Int]
+buf += 1
+buf += 2 //append at the end
+0 +=: buf //append at the begining
+buf.toList
+
+//Simiarly with ArrayBuffer
+import scala.collection.mutable.ArrayBuffer
+val Abuf = new ArrayBuffer[Int]()
+Abuf += 1
+Abuf += 2
+0 +=: Abuf
+
+//Using mutable sets for word count
+val wordsArray = Array("A", "A", "B", "C", "D", "C")
+import scala.collection.mutable
+val words = mutable.Set.empty[String]
+for (word <- wordsArray)
+  words += word
+
+
+//common operation for sets
+//this is immutable, so can not use += 
+val nums = Set(1,2,3)
+nums + 5
+nums - 3
+nums ++ List(5, 6)
+nums -- List(1,2)
+nums & Set(1,3,5,7)
+nums.size
+nums.contains(3)
+
+
+//Method for Maps
+val mm = Map("i" -> 1, "ii" -> 2)
+mm + ("vi" -> 6)
+mm - "ii" //remove entry
+mm ++ List("iii" -> 3, "v" -> 5) //adding multiple entries
+mm.size
+mm.contains("ii")
+mm("ii")
+
+mm.keys //return a iterator
+mm.keySet //return a set
+mm.values //return a iterator
