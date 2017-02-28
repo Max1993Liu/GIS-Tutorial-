@@ -1354,5 +1354,65 @@ Two solutions to the problem:
 1. Preinitialized fields
 2. Lazy vals
 
+import java.sql.Types
+
+pre-initialized fields lets you initialize a field of subclass before the superclass is called
+
+new {
+  val numerArg = 1 * x
+  val denomArg = 2 * x
+} with RationalTrait
+
+object twoThirds extends {
+  val numerArg = 2
+  val denomArg = 3
+} with RationalTrait
+
+//Because the pre-initialized fields are initialized before the
+//superclass constructor is called, their initializers can't refer to
+//the object that's being constructed
+
+Lazy vals: Only evaluate when used, and save the value for later use
+
+trait LazyRationalTrait {
+  val numerArg: Int
+  val denomArg: Int
+  lazy val numer = numerArg / g
+  lazy val denom = denomArg / g
+  override def toString = numer +"/"+ denom
+  private lazy val g = {
+    require(denomArg != 0)
+    gcd(numerArg, denomArg)
+  }
+  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+}
+
+Abstract Types
+class Food
+abstract class Animal {
+  def eat(food: Food)
+}
+
+class Grass extends Food
+class Cow extends Animal {
+  override def eat(food: Grass){}
+}
+//This won't compile, because the eat method in class Cow does not override the eat method in class Animal,
+//because its parameter type is different
+
+//A proper way of doing it is apply more precise type modeling
+class Food
+abstract class Animal {
+  type SuitableFood <: Food //accept subclasses of Food
+  def eat(food: SuitableFood)
+}
+
+class Grass extends Food
+class Cow extends Animal {
+  type SuitableFood = Grass
+  override def eat(food: Grass){}
+}
+
+--- Enumeration -------------------------------------
 
 
