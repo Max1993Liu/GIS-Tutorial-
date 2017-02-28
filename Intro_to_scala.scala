@@ -1199,4 +1199,30 @@ mm("ii")
 
 mm.keys //return a iterator
 mm.keySet //return a set
-mm.values //return a iterator
+mm.values //return a iteratorgit 
+
+
+--- Type parametization -----------------------------
+//sorted sets and maps
+import scala.collection.immutable.TreeSet
+val ts = TreeSet(9, 3, 1, 8, 0)
+
+import scala.collection.immutable.TreeMap
+val tm = TreeMap(1 -> "x", 2 -> "y", 3 -> "z")
+
+//this is slow, because the enqueue takes time proportional to the size of the queue
+class SlowAppendQueue(elems: List[T]){
+  def head = elems.head
+  def tail = new SlowAppendQueue(elems.tail)
+  def enqueue(x: T) = new SlowAppendQueue(elems:::List(x))
+}
+
+//One way of improvement is to reverse the list
+//now head and tail takes time proportional to the size
+class SlowHeadQueue(elem: List[T]){
+  def head = elem.last
+  def tail = new SlowHeadQueue(elem.init)
+  def enqueue(x:T) = new SlowHeadQueue(x::elem)
+}
+
+
