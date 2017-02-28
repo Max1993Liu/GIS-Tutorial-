@@ -1226,3 +1226,133 @@ class SlowHeadQueue(elem: List[T]){
 }
 
 
+//A better implementation
+class Queue[T](
+  private val leading: List[T],
+  private val trailing: List[T]
+              ){
+  private def mirror = {
+    if (leading.isEmpty)
+      new Queue(trailing.reverse, Nil)
+    else
+      this
+  }
+
+  def head = mirror.leading.head
+  def tail = {
+    val q = mirror
+    new Queue(q.leading.tail, q.trailing)
+  }
+
+  def enqueue(x: T) =
+    new Queue(leading, x::trailing)
+
+}
+
+//private constructors
+class Queue[T] private (
+                         private val leading: List[T],
+                         private val trailing: List[T]
+                       )
+
+new Queue(List(1,2), List(3)) //return error
+
+//since the primary constructor of class Queue is no longer available
+//there's other way to create new queues with auxiliary constructor
+def this(elems: T*) = this(elems.toList, Nil)
+//T* is notation for repeated parameters
+
+//or add a factory methods by define an object Queue
+object Queue {
+  //construct a queue with initial elements 'xs'
+  def apply[T](xs: T*) = new Queue[T](xs.toList, Nil)
+}
+//Now users can create new Queue with Queueu(1,2,3)
+
+
+
+
+--- Abstract ---------------------------------------
+Four types of abstracts in scala: type, method, val and var
+
+trait Abstract {
+  type T
+  def transform(x: T): T
+  val initial: T
+  var current: T
+}
+
+//concrete implementation
+class Concrete extends Abstract {
+  type T = String
+  def transform(x: String) = x + x
+  val initial = "hi"
+  var current = initial
+}
+
+
+//Abstract vals
+val initial: String
+
+def initial: String
+//This is also valid, but the difference is val is guaranteed
+//to yield the same value every time, while def could be implemented
+//by a concrete method that return a different value
+
+abstract class Fruit {
+  val v: String // ‘v’ for value
+  def m: String // ‘m’ for method
+}
+abstract class Apple extends Fruit {
+  val v: String
+  val m: String // OK to override a ‘def’ with a ‘val’
+}
+abstract class BadApple extends Fruit {
+  def v: String // ERROR: cannot override a ‘val’ with a ‘def’
+  def m: String
+}
+
+
+//abstract vars
+trait AbstractTime {
+  var hour: Int
+  var minute: Int
+}
+//exactly the same
+trait AbstractTime {
+  def hour: Int
+  def hour_=(x: Int)
+  def minute: Int
+  def minute_=(x: Int)
+  // getter for ‘hour’
+  // setter for ‘hour’
+  // getter for ‘minute’
+  // setter for ‘minute’
+}
+
+
+//abstract vals is often used in traits
+//since traits can not take constructor values
+trait RationalTrait {
+  val numerArg: Int
+  val denomArg: Int
+}
+//instantiate a concrete of that trait
+//return an anonymous class
+val t = new RationalTrait {
+  val numerArg = 1
+  val denomArg = 2
+}
+
+/*the expression of numerArg and denomArg are evaluated as part of 
+the initialization of the anonymous class, but the anonymous class is 
+initialized after the RationalTrait. So the values are not available during
+the initialization of RationalTrait(the values will be Int:0)
+ */
+
+Two solutions to the problem:
+1. Preinitialized fields
+2. Lazy vals
+
+
+
