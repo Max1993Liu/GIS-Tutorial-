@@ -1,3 +1,21 @@
+scala default uses call by value -> evaluates expression before passing to function
+you can force to use call by name -> pass expression to function before evaluation by using:
+def first(x: Int, y: => Int) = 1 //here y is call by name
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /** mannually declare type */
 var msg: String = "Hello world!"
 
