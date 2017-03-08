@@ -2,16 +2,61 @@ scala default uses call by value -> evaluates expression before passing to funct
 you can force to use call by name -> pass expression to function before evaluation by using:
 def first(x: Int, y: => Int) = 1 //here y is call by name
 
+1. the def is "by name", its right-hand side is evaluated on each use
+2. val is by value, the right-hand side of a val definition is evaluated at the 
+point of definition itself.
 
+ex.
+def loop: Boolean = loop
+def x = loop //no problem
+val x = loop //infinite loop
 
+for recursive function, the return type is required, while for other function it's optional
 
+---- Blocks and lexical scopes ------------------------
+A block is delimited by braces {...}
+1. It contains a sequence of definitions or expressions
+2. The last element of a block is an expression that defines its value
+3. Blocks are themselves expressions, a block may appear everywhere an expression can.
+4. The definitions inside a block shadow definitions of the same name outside of the block
 
+ex. newton's method
 
+import scala.math
+def sqrt(x: Double) = {
+  def sqrtIter(guess: Double, x: Double): Double =
+    if (isGoodEnough(guess, x)) guess
+    else sqrtIter(improve(guess, x), x)
 
+  def isGoodEnough(guess: Double, x: Double): Boolean =
+    math.abs(guess * guess - x) < 0.001
 
+  def improve(guess: Double, x: Double): Double =
+    (guess + x / guess) / 2
+  //last element of block defines the value
+  sqrtIter(1, x)
+}
+sqrt(2)
 
+lexical Scoping:
+1. definitions of outer blocks are visible inside a block unless they're shadowed.
+2. Previous example can be simplified by eliminating redundant occurrences of the x parameter
 
+import scala.math
+def sqrt(x: Double) = {
+  def sqrtIter(guess: Double): Double =
+    if (isGoodEnough(guess)) guess
+    else sqrtIter(improve(guess))
 
+  def isGoodEnough(guess: Double): Boolean =
+    math.abs(guess * guess - x) < 0.001
+
+  def improve(guess: Double): Double =
+    (guess + x / guess) / 2
+
+  sqrtIter(1)
+}
+sqrt(2)
 
 
 
