@@ -59,6 +59,27 @@ def sqrt(x: Double) = {
 sqrt(2)
 
 
+--- Tail Recursion ----------------------
+//it's a tail recursion call
+def gcd(a: Int,  b: Int): Int = 
+  if (b == 0 ) a else gcd(b, a%b)
+
+//not a tail recursion call, because the last it also times n
+def factorial(n: Int): Int = 
+  if (n == 0) 1 else n * factorial(n-1)
+
+If a function cas itsef as its last action, the functions stack frame can be reused.
+This is called tail recursion. 
+In general, if the last action of a function consist of calling a function (which may be the same), 
+one stack frame would be sufficient for both functions. Such calls are called tail-calls.
+
+In Scala, only directly recursive calls to the current function are optimized
+One can require that a function is tail-recursing using:
+@tailrec
+def gcd(a: Int, b: Int): Int = ....
+
+
+
 
 
 /** mannually declare type */
