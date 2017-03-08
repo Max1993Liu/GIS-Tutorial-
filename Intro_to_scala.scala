@@ -79,6 +79,60 @@ One can require that a function is tail-recursing using:
 def gcd(a: Int, b: Int): Int = ....
 
 
+--- High-order functions -------------------
+functions that take other functions as parameters or that return 
+functions as results are called higher order functions
+
+def sumInts(a: Int, b: Int): Int = {
+  if (a > b) 0 else a + sumInts(a+1, b)
+}
+
+def cube(x: Int): Int = x * x * x
+
+def sumCubes(a: Int, b: Int): Int =
+  if (a > b) 0 else cube(a) + sumCubes(a+1, b)
+
+//abstract the pattern
+def sum(f: Int => Int, a: Int, b: Int): Int = {
+  if (a > b) 0 else f(a) + sum(f, a+1, b)
+}
+
+def sumInts(a: Int, b: Int) = sum(identity, a, b)
+def sumCubes(a: Int, b: Int) = sum(cube, a, b)
+
+Here we defines extra small functions which can be pretty annoying
+compare to strings:
+def str = "abc"; println(str)
+println("abc")
+we can do that because string exists as literals, Analogously we 
+would like function literals => anonymous functions
+
+Note that a and b get passed unchanged from sumInts and sumCubes into sum
+can we be even shorter by getting rid of those parameters?
+
+def sum(f: Int => Int): (Int, Int) => Int = {
+  def sumF(a: Int, b: Int): Int =
+    if (a > b) 0
+    else f(a) + sumF(a + 1, b)
+  sumF
+}
+
+sum is now a function that returns another function
+now:
+def sumInts = sum(x => x)
+def sumCubes = sum(x => x* x* x)
+
+we can also do sum(cube)(1, 10)
+note here sum(cube) applies sum to cube and returns a FUNCTION
+this function is then applied to parameters (1, 10)
+
+Scala provides a special syntax
+def sum(f: Int => Int)(a: Int, b: Int): Int =
+  if (a > b) 0 else f(a) + sum(f)(a+1, b)
+
+
+
+
 
 
 
