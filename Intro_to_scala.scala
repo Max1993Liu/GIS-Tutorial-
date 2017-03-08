@@ -131,7 +131,9 @@ def sum(f: Int => Int)(a: Int, b: Int): Int =
   if (a > b) 0 else f(a) + sum(f)(a+1, b)
 
 
-
+Because operators are also valid identifiers so - (minus sign) can also be an identifiers
+To implement method of a - b, it should be def - (a, b)
+To implement method of -a, it should be def unary_- : type = 
 
 
 
