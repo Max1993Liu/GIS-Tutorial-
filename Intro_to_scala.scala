@@ -16,8 +16,6 @@ class FunSetSuite extends FunSuite {
 //assert using === shows detailed information when assert fails
 
 
-
-
 scala default uses call by value -> evaluates expression before passing to function
 you can force to use call by name -> pass expression to function before evaluation by using:
 def first(x: Int, y: => Int) = 1 //here y is call by name
@@ -154,6 +152,67 @@ def sum(f: Int => Int)(a: Int, b: Int): Int =
 Because operators are also valid identifiers so - (minus sign) can also be an identifiers
 To implement method of a - b, it should be def - (a, b)
 To implement method of -a, it should be def unary_- : type = 
+
+
+Any subclasses can be used when a superclass is required.
+//binary tree implementation of integer set
+abstract class IntSet {
+  def incl(x: Int): IntSet
+  def contains(x: Int): Boolean
+}
+
+object Empty extends IntSet {
+  def contains(x: Int) = false
+  def incl(x: Int): IntSet = new NonEmpty(x, Empty, Empty)
+  override def toString = "."
+}
+
+class NonEmpty(
+     val elem: Int,
+     val left: IntSet,
+     val right: IntSet
+              ) extends IntSet {
+  def contains(x: Int): Boolean = {
+    if (x < elem) left contains x
+    else if (x > elem) right contains x
+    else true
+  }
+
+  def incl(x: Int): IntSet = {
+    if (x < elem) new NonEmpty(elem, left incl x, right)
+    else if (x > elem) new NonEmpty(elem, left, right incl x)
+    //already in the tree
+    else this
+  }
+
+  override def toString = "{" + left + elem + right + "}"
+}
+
+val t1 = new NonEmpty(3, Empty, Empty)
+val t2 = t1 incl 4
+
+Since there is really only one Empty set, so it's better to create EmptySet as an object. 
+object is created when it's first referenced by calling its name.
+
+
+--- managing modules with packages ----------------------
+//top of source file
+package progfun.examples
+object Hello { ... }
+//To run the Hello program
+scala progfun.examples.Hello
+
+import progfun._  //import everything in progfun
+import progfun.{Hello, Rational} //import selected packages
+
+!you can import either a package or an object
+
+
+
+
+
+
+
 
 
 
