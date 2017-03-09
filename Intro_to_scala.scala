@@ -208,9 +208,60 @@ import progfun.{Hello, Rational} //import selected packages
 !you can import either a package or an object
 
 
+--- Traits -----------------------------------------------
+in Java, as well as in Scala, a class can only have on superclass
+But when a class has several natural supertyeps to which it conforms
+Now we use traits
+trait can not have parameters.
+
+class, object and trait can inheritant from at most one class but as many traits as you want
+class Square extends Shape with Area with Movable with param {
+  ...
+}
 
 
+The type of null is Null, Null is a subtype of every class that inheritants from object;
+while it is incompatible with subtypes of AnyVal
 
+val x = null
+val y: String = null
+val z: Int = null //error
+
+--- Type parameters --------------------------------------
+trait List[T]{
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T]{
+  def isEmpty = false
+}
+
+class Nil[T] extends List[T] {
+  def isEmpty = true
+  def head = throw new NoSuchElementException("Nil.head")
+  def tail = throw new NoSuchElementException("Nil.tail")
+}
+
+//function can also take tyep parameters
+def singleton[T](elem: T) = new Cons[T](elem, new Nil[T])
+!! Need to define [T] right after the function name 
+!! So the parameters know what [T] is  
+
+singleton[Int](1)
+singleton[Boolean](true)
+//most times Scala compile can infer the type
+singleton(1)
+singleton(true)
+
+Type parameters do not affect the evaluation in Scala
+We can assume all type parameters and arguments are removed before evaluating the program
+
+polymorphism:
+1. subtyping: instances of a subclass can be passed to a base class
+2. generics: instances of a function or class can be created by type parameterization
 
 
 
