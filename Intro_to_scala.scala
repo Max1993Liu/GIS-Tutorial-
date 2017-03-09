@@ -1,3 +1,23 @@
+! detailed documentation on Scala testing suits
+http://doc.scalatest.org/1.9.1/index.html#org.scalatest.FunSuite
+A basic testing will be like:
+
+import org.scalatest.FunSuite
+import org.junit.runner.RunWith
+import org.scalatest.junit.JUnitRunner
+
+@RunWith(classOf[JUnitRunner])
+class FunSetSuite extends FunSuite {
+  test("adding integers"){
+    assert(1 + 2 === 4)
+  }
+}
+//test() defines the name of the test
+//assert using === shows detailed information when assert fails
+
+
+
+
 scala default uses call by value -> evaluates expression before passing to function
 you can force to use call by name -> pass expression to function before evaluation by using:
 def first(x: Int, y: => Int) = 1 //here y is call by name
