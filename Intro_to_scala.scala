@@ -322,8 +322,24 @@ Two main areas where these two interact:
 1. bounds: subject type parameter to some constraints
 2. variance: define how parameter types behave under subtyping
 
+//upper bounds
+def someFunction[S <: IntSet](r: S): S = {
+    ...
+}
 
+//lower bounds
+def someFunction[S >: IntSet](r: S): S = {
+  ...
+}
 
+If A <: B, then everything one can do with a value of type B, 
+one should also be able to do with a value of type A
+
+same if A <: B                    
+if c[A] <: c[B] c is covariant     -------   class c[+T]
+if c[B] <: c[A] c is contravariant -------   class c[-T]
+
+--- Decomposition ----------------------------------------
 
 
 
