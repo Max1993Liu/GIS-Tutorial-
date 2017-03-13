@@ -264,6 +264,71 @@ polymorphism:
 2. generics: instances of a function or class can be created by type parameterization
 
 
+--- Objects everywhere ------------------------
+A pure OO language is one in which every value is an object
+
+function values are treated as objects in Scala
+function A => B is just an abbreviation for the class
+scala.Function1[A, B], which is roughly defined as follows.Array
+
+package scala
+trait Function1[A, B] {
+  def apply(x: A): B
+}
+
+Expansion of function values
+  (x: Int) => x * x
+is expanded to:
+  {class AnonFun extends Function1[Int, Int]{
+    def apply(x: Int) = x * x
+  }
+    new AnonFun
+}
+  
+//implementation of List
+trait List[T] {
+  def isEmpty: Boolean
+  def head: T
+  def tail: List[T]
+}
+
+class Cons[T](val head: T, val tail: List[T]) extends List[T] {
+  def isEmpty: Boolean =  false
+}
+
+class Nil[T] extends List[T] {
+  def isEmpty: Boolean = true
+  def head: Nothing = throw new NoSuchElementException()
+  def tail: Nothing = throw new NoSuchElementException()
+}
+
+object List {
+  //List(1, 2) is List.apply(1, 2)
+  def apply[T](x1: T, x2: T): List[T] = {
+    new Cons(x1, new Cons(x2, new Nil))
+  }
+  def apply[T](x1: T): List[T] = {
+    new Cons(x1, new Nil)
+  }
+
+  def apply[T]() = new Nil
+}
+
+
+Two principal forms of polymorphism
+1. subtyping: we can pass instance of a subtype when a base type is required
+2. generics: we can parameterize types 
+Two main areas where these two interact:
+1. bounds: subject type parameter to some constraints
+2. variance: define how parameter types behave under subtyping
+
+
+
+
+
+
+
+
 
 
 
