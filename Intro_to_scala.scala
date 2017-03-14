@@ -339,7 +339,39 @@ same if A <: B
 if c[A] <: c[B] c is covariant     -------   class c[+T]
 if c[B] <: c[A] c is contravariant -------   class c[-T]
 
---- Decomposition ----------------------------------------
+--- Pattern Matching ----------------------------------------
+trait Expr{
+  def eval: Int = this match {
+    case Number(n) => n
+    case Sum(e1, e2) => e1.eval + e2.eval  
+  }
+}
+
+case class Number(n: Int) extends Expr
+
+case class Sum(e1: Expr, e2: Expr) extends Expr
+
+def eval(e: Expr): Int = e match {
+  case Number(n) => n
+  case Sum(e1, e2) => eval(e1) + eval(e2)
+}
+
+
+val test = Number(2)
+eval(test) //2
+
+Patterns are constructed from
+1. constructor: Number, Sum
+2. variables: n, e1, e2
+3. wildcard patterns: _
+4. constants, eg. 1, true
+
+rules:
+Variables always begin with a lowercase letter
+The same variable name can only appear once in a pattern
+Names of constants begins with a capital letter, with the exception of 
+reserved words null, true, false
+
 
 
 
