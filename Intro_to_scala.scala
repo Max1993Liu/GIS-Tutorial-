@@ -373,7 +373,29 @@ Names of constants begins with a capital letter, with the exception of
 reserved words null, true, false
 
 
+Pattern matching for List
+def sample[T](xs: List[T]) = xs match {
+  //first match empty list
+  case List() => List()
+  case x::xs => .....
+}
 
+//insertion sort with pattern matching
+def isort(xs: List[Int]): List[Int] = xs match {
+  case List() => List()
+  case x::xs => insert(x, isort(xs))
+}
+
+
+def insert(x: Int, xs: List[Int]): List[Int] = xs match {
+  case List() => List(x)
+  case y::ys => {
+    if (x <= y ) x::y::ys else y::insert(x, ys)
+  }
+}
+
+val test = List(2, 5, 3, 1, 4)
+isort(test)
 
 
 
