@@ -373,7 +373,7 @@ Names of constants begins with a capital letter, with the exception of
 reserved words null, true, false
 
 
-Pattern matching for List
+Pattern matching for List:
 def sample[T](xs: List[T]) = xs match {
   //first match empty list
   case List() => List()
@@ -396,6 +396,106 @@ def insert(x: Int, xs: List[Int]): List[Int] = xs match {
 
 val test = List(2, 5, 3, 1, 4)
 isort(test)
+
+
+Pattern matching for Pair:
+//merge sort
+def msort(xs: List[Int]): List[Int] = {
+  val n = xs.length / 2
+  if (n == 0) xs
+  else {
+    val (fst, snd) = xs splitAt n
+    merge(msort(fst), msort(snd))
+  }
+}
+
+def merge(xs: List[Int], ys: List[Int]): List[Int] = {
+  (xs, ys) match {
+    case (Nil, z::zs) => ys
+    case (t::ts, Nil) => xs
+    case (t::ts, z::zs) => {
+      if (t <= z) t::merge(ts, ys)
+      else z::merge(xs, zs)
+    }
+  }
+}
+
+
+
+--- More on Lists ---------------------------------------
+def last[T](xs: List[T]): T = xs match {
+  case List() => throw new Error("Last of empty")
+  case List(x) => x
+  case y::ys => last(ys)
+}
+
+
+def init[T](xs: List[T]): List[T] = xs match {
+  case List() => throw new Error("Last of empty")
+  case List(x) => List()
+  case y::ys =>   y::init(ys)
+}
+
+def concat[T](xs: List[T], ys: List[T]): List[T] = xs match {
+  case List() => ys
+  case z::zs => z::concat(zs, ys)
+}
+
+def reverse[T](xs: List[T]): List[T] = xs match {
+  case List() => xs
+  case y::ys => reverse(ys) ++ List(y)
+}
+
+def removeAt[T](xs: List[T], n: Int): List[T] = {
+  if (n > xs.length)
+    xs
+  else if (n == 0)
+    xs.tail
+  else
+    xs.head::removeAt(xs.tail, n-1)
+}
+
+def flatten(xs: List[Any]): List[Any] = xs match {
+  case Nil => Nil
+  case (head: List[Any]) :: tail => flatten(head) ++ flatten(tail)
+  case head :: tail => head :: flatten(tail)
+}
+
+flatten(List(List(1, 1), 2, List(3, List(5, 8))))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
