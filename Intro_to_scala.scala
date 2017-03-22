@@ -465,6 +465,7 @@ flatten(List(List(1, 1), 2, List(3, List(5, 8))))
 
 
 
+High-order functions:
 
 
 
