@@ -467,24 +467,103 @@ flatten(List(List(1, 1), 2, List(3, List(5, 8))))
 
 High-order functions:
 
+--- reducers -----------------
+reduceLeft:
+def sum(xs: List[Int]): Int = {
+	(0::xs) reduceLeft (_+_)
+}
+
+def product(xs: List[Int]): Int = {
+	(1::xs) reduceLeft (_*_)
+}
+
+foldLeft:
+if the list is empty, return the accumulator z
+
+def sum(xs: List[Int]) = {
+	(xs foldLeft 0)(_ + _)
+}
+
+def product(xs: List[Int]) = {
+	(xs foldLeft 1)(_+_)
+}
+
+abstract class List[T] {
+
+	def reduceLeft(op: (T, T) => T):T = this match{
+		case Nil => throw new Error
+		case x::xs => (xs foldLeft x)(op)	
+	}
+
+	def foldLeft[U](z: U)(op: (U, T) => U): U = this match {
+		case Nil => z
+		case x::xs => (xs foldLeft op(z, x))(op)
+	}
+}
+
+There're also reduceRight and foldRight
 
 
 
+--- Other Collections ------------------------
+Vector:
+
+val nums = Vector(1, 2, 3)
+0 +: nums //different ways of appending 
+nums :+ 4
+//other methods are same with list
+//vector is implemented with Array, so faster access to variables and bulk operation like map, foreach
 
 
 
+Sets:
+Set("Apple", "Banana", "Orange")
+//most methods with sequence can also apply to sets
+1. sets are unordered
+2. sets do not have duplicates
+3. the fundamental method is "contains"
+
+
+N queens problem:
+def queens(n: Int): Set[List[Int]] = {
+  def placeQueens(k: Int): Set[List[Int]] =
+    if (k == 0) Set(List())
+    else
+      for {
+        queens <- placeQueens(k - 1)
+        col <- 0 until n
+        if isSafe(col, queens)
+      } yield col::queens
+
+  def isSafe(col: Int, queens: List[Int]): Boolean = {
+    val row = queens.length
+    val queensWithRow = (row -1 to 0 by -1) zip queens
+    queensWithRow forall {
+      case (r, c) => col != c && math.abs(col -c) != row -r
+
+    }
+  }
+  placeQueens(n)
+}
 
 
 
+Maps:
+Maps in scala is both iterable and function
+ex. 
+val romanNumber = Map("I" -> 1, "V" -> 5, "IV" -> 4)
+
+set default value:
+val romanNumberWithDefault = romanNumber withDefaultValue "unknown"
 
 
+Map[Key, Value] also extends the function type key => value
+so maps can be used everywhere function can 
 
+Map get Key: return None if the key is not contained in the map
 
-
-
-
-
-
+val fruit = List("apple", "pear", "orange", "pineapple")
+fruit groupBy(_.head) //Map(p -> List(pear, pineapple),...
 
 
 
