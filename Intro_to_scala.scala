@@ -86,13 +86,15 @@ def gcd(a: Int,  b: Int): Int =
 def factorial(n: Int): Int = 
   if (n == 0) 1 else n * factorial(n-1)
 
-If a function cas itsef as its last action, the functions stack frame can be reused.
+If a function calls itsef as its last action, the functions stack frame can be reused.
 This is called tail recursion. 
 In general, if the last action of a function consist of calling a function (which may be the same), 
 one stack frame would be sufficient for both functions. Such calls are called tail-calls.
 
 In Scala, only directly recursive calls to the current function are optimized
 One can require that a function is tail-recursing using:
+
+import scala.annotation.tailrec
 @tailrec
 def gcd(a: Int, b: Int): Int = ....
 
@@ -419,6 +421,20 @@ def merge(xs: List[Int], ys: List[Int]): List[Int] = {
     }
   }
 }
+
+
+Pattern matching (else):
+def toYesOrNo(choice: Int): String = choice match {
+    case 1 => "yes"
+    case 0 => "no"
+    case _ => "error" //default cases
+  }
+
+def toYesOrNo(choice: Int): String = choice match {
+    case 1 | 2 | 3 => "yes"
+    case 0 => "no"
+    case _ => "error"
+  }
 
 
 
