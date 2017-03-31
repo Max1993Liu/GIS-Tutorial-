@@ -2015,5 +2015,3 @@ class Cow extends Animal {
 }
 
 --- Enumeration -------------------------------------
-
-
